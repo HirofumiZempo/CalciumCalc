@@ -158,6 +158,14 @@
     display:flex; gap:10px; justify-content:flex-end; padding:14px 16px; border-top:1px solid var(--border); background:rgba(255,255,255,.02)
   }
   .ghost{opacity:.85}
+  
+  .sub a {
+    color: #60a5fa; /* 水色系 (Tailwindのblue-400相当) */
+    text-decoration: none;
+  }
+  .sub a:hover {
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
@@ -166,6 +174,7 @@
       <div class="head">
         <h1 class="title">カルシウム摂取チェック <span class="badge">年齢・性別で評価</span></h1>
         <p class="sub">各設問を選択し、「合計を表示」を押すと、総量（mg）と年齢・性別の推奨量に照らした評価を表示します。</p>
+        <p class="sub"><a href="https://hirofumizempo.github.io/NankatsuRecipit/" target="_blank" rel="noopener noreferrer">カルシウムが多く含まれるランキングは、リンク先（東京聖栄大学-南葛SCレシピ集）の50ページ目です。</a></p>
       </div>
 
       <div class="body">
@@ -454,4 +463,3 @@
 </script>
 </body>
 </html>
-
