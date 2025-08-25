@@ -6,45 +6,48 @@
 <title>カルシウム摂取チェック</title>
 <style>
   :root{
-    --bg:#0f172a;            /* slate-900 */
-    --card:#0b1227;          /* slightly lighter */
-    --accent:#60a5fa;        /* blue-400 */
-    --accent-2:#93c5fd;      /* blue-300 */
-    --text:#e5e7eb;          /* gray-200 */
-    --muted:#9ca3af;         /* gray-400 */
-    --border:#1f2937;        /* gray-800 */
-    --ok:#34d399;            /* emerald-400 */
-    --warn:#fbbf24;          /* amber-400 */
+    /* ===== Mojoっぽい配色（黒×オレンジ系） ===== */
+    --bg:#0b0b0e;            /* ほぼ黒 */
+    --card:#111116;          /* 黒に近い濃紺/濃灰 */
+    --accent:#ff6a00;        /* Mojoオレンジ */
+    --accent-2:#ff9a1a;      /* 明るめオレンジ */
+    --text:#e6e7ec;          /* 明るい灰白 */
+    --muted:#9ea3ad;         /* ミュート文字 */
+    --border:#1f2330;        /* 枠線 */
+    --ok:#22c55e;            /* 良好（緑） */
+    --warn:#fbbf24;          /* 注意（黄） */
+    --bad:#ef4444;           /* 過剰（赤） */
   }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
     margin:0;
-    background: radial-gradient(1200px 800px at 80% -10%, #1e293b 0%, #0b1227 45%, #0b1227 60%, #0f172a 100%),
-               linear-gradient(180deg, #0f172a, #0b1227 30%, #0f172a);
+    background:
+      radial-gradient(1400px 900px at 85% -10%, #1a1a20 0%, #111116 45%, #0f1118 60%, var(--bg) 100%),
+      linear-gradient(180deg, #0c0c10, #0f1118 30%, var(--bg));
     color:var(--text);
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   }
-  .wrap{
-    max-width:960px; margin:48px auto; padding:0 20px;
-  }
+  .wrap{max-width:960px; margin:48px auto; padding:0 20px}
   .card{
-    background:rgba(11,18,39,.6);
+    background:rgba(17,17,22,.65);
     border:1px solid var(--border);
     backdrop-filter: blur(8px);
     border-radius:20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    box-shadow: 0 20px 60px rgba(0,0,0,.40);
     overflow:hidden;
   }
   .head{
     padding:26px 28px;
-    background:linear-gradient(135deg, rgba(96,165,250,.18), rgba(52,211,153,.08));
+    background:
+      linear-gradient(135deg, rgba(255,106,0,.20), rgba(255,154,26,.10));
     border-bottom:1px solid var(--border);
   }
   .title{margin:0; font-size:22px; letter-spacing:.2px}
   .sub{margin:6px 0 0; color:var(--muted); font-size:14px}
   .body{padding:22px 22px 8px}
+
   .grid{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -53,6 +56,9 @@
   @media (max-width: 820px){
     .grid{grid-template-columns:1fr}
   }
+
+  .section-title{margin:2px 0 6px; font-size:16px; color:var(--muted)}
+
   .field{
     padding:14px;
     border:1px solid var(--border);
@@ -60,23 +66,22 @@
     background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
   }
   .label{
-    display:block; font-size:18px; color:var(--muted); margin-bottom:8px;
+    display:block; font-size:16px; color:var(--muted); margin-bottom:8px;
   }
-  select{
+  .select-wrap, .input-wrap{position:relative}
+  select, input[type="number"], input[type="text"]{
     width:100%;
     padding:12px 14px;
     border-radius:10px;
     border:1px solid var(--border);
     background:
-      linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,2)) padding-box,
-      linear-gradient(135deg, rgba(96,165,250,.45), rgba(52,211,153,.25)) border-box;
-    color:blue;
+      linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)) padding-box,
+      linear-gradient(135deg, rgba(255,106,0,.55), rgba(255,154,26,.35)) border-box;
+    color:var(--text);
     appearance:none;
     outline:none;
-    position:relative;
     font-size:15px;
   }
-  .select-wrap{position:relative}
   .select-wrap:after{
     content:"";
     position:absolute; right:12px; top:50%; transform:translateY(-50%);
@@ -87,7 +92,7 @@
   .btn{
     padding:12px 16px; border-radius:12px; border:1px solid var(--border);
     background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0));
-    color:var(--text); cursor:pointer; font-weight:600; letter-spacing:.2px;
+    color:var(--text); cursor:pointer; font-weight:700; letter-spacing:.2px;
     transition:.2s transform ease, .2s background ease, .2s opacity ease;
   }
   .btn:hover{transform:translateY(-1px)}
@@ -95,57 +100,98 @@
     border-color: transparent;
     background:
       linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0)) padding-box,
-      linear-gradient(135deg, var(--accent), var(--ok)) border-box;
-    font-size: 18px; /* 「合計を表示」ボタンのフォントを調整*/
+      linear-gradient(135deg, var(--accent), var(--accent-2)) border-box;
+    font-size: 18px; /* 「合計を表示」ボタンを大きめに */
   }
   .hint{font-size:13px; color:var(--muted)}
   .foot{padding:12px 22px 22px}
 
+  /* バッジ */
+  .badge{
+    display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid var(--border);
+    background: rgba(255,255,255,.04);
+    margin-left:8px; color:var(--muted);
+  }
+
   /* Modal */
   .modal-backdrop{
-    position:fixed; inset:0; background:rgba(2,6,23,.65);
+    position:fixed; inset:0; background:rgba(2,6,23,.70);
     display:none; align-items:center; justify-content:center; z-index:50;
   }
   .modal{
-    width:min(560px, calc(100% - 28px));
-    background:#0c1226;
+    width:min(600px, calc(100% - 28px));
+    background:#10131d;
     border:1px solid var(--border); border-radius:18px;
     box-shadow:0 30px 80px rgba(0,0,0,.55);
     overflow:hidden;
   }
   .modal-h{
     padding:18px 20px; border-bottom:1px solid var(--border);
-    background:linear-gradient(135deg, rgba(96,165,250,.18), rgba(52,211,153,.08));
+    background:linear-gradient(135deg, rgba(255,106,0,.20), rgba(255,154,26,.10));
   }
   .modal-t{margin:0; font-size:18px}
   .modal-b{padding:20px}
   .total{
     display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
-    margin:4px 0 8px;
+    margin:4px 0 10px;
   }
   .total strong{font-size:32px; line-height:1}
-  .meter{width:100%; height:14px; background:#0a1020; border:1px solid var(--border); border-radius:999px; overflow:hidden}
+
+  .meter{width:100%; height:14px; background:#0a1020; border:1px solid var(--border); border-radius:999px; overflow:hidden; margin:8px 0}
   .bar{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), var(--ok)); transition:width .4s ease}
+
   .note{font-size:12px; color:var(--muted); margin-top:6px}
   .advice{
-    margin-top:14px; padding:12px; border-radius:12px; border:1px dashed var(--border); color:#fef3c7; background:rgba(251,191,36,.06);
+    margin-top:12px; padding:12px; border-radius:12px; border:1px dashed var(--border);
+    background:rgba(251,191,36,.08); color:#fde68a;
   }
+  .eval{
+    margin-top:10px; padding:10px; border-radius:10px; border:1px solid var(--border); background:rgba(255,255,255,.03);
+    font-size:14px;
+  }
+  .eval .status{font-weight:800}
+  .status.ok{color:var(--ok)}
+  .status.warn{color:var(--warn)}
+  .status.bad{color:var(--bad)}
+
   .modal-f{
     display:flex; gap:10px; justify-content:flex-end; padding:14px 16px; border-top:1px solid var(--border); background:rgba(255,255,255,.02)
   }
-  .ghost{opacity:.8}
+  .ghost{opacity:.85}
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <div class="head">
-        <h1 class="title">カルシウム摂取チェック</h1>
-        <p class="sub">各設問を選択し、「合計を表示」を押すと、合計の総量（mg）を表示します。</p>
+        <h1 class="title">カルシウム摂取チェック <span class="badge">年齢・性別で評価</span></h1>
+        <p class="sub">各設問を選択し、「合計を表示」を押すと、総量（mg）と年齢・性別の推奨量に照らした評価を表示します。</p>
       </div>
 
       <div class="body">
+        <!-- 年齢・性別（必須） -->
+        <div class="grid" style="margin-bottom:12px">
+          <div class="field">
+            <label class="label" for="sex">性別（必須）</label>
+            <div class="select-wrap">
+              <select id="sex" required>
+                <option value="" disabled selected>選択してください</option>
+                <option value="male">男性</option>
+                <option value="female">女性</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="age">年齢（歳・必須）</label>
+            <div class="input-wrap">
+              <input id="age" type="number" inputmode="numeric" min="1" max="120" placeholder="例）45" required>
+            </div>
+          </div>
+        </div>
+
+        <!-- 設問群 -->
         <form id="form">
+          <div class="section-title">普段の食習慣を選択してください（全項目必須）</div>
           <div class="grid" id="qgrid"><!-- JS render --></div>
           <div class="btn-row">
             <button class="btn btn-primary" type="button" id="calcBtn">合計を表示</button>
@@ -154,7 +200,7 @@
         </form>
       </div>
       <div class="foot">
-        <div class="hint">石井ら. Osteoporosis Japan 2005 13:497-502.を改編</div>
+        <div class="hint">基準：日本人の食事摂取基準（2025年版）の推奨量に準拠。耐容上限量は18歳以上 2,500 mg/日。</div>
       </div>
     </div>
   </div>
@@ -170,8 +216,15 @@
           <span>合計</span>
           <strong><span id="totalMg">0</span> mg</strong>
         </div>
+
         <div class="meter"><div id="bar" class="bar"></div></div>
-        <div class="note" id="meterNote">最大値（1600 mg = 100%）</div>
+        <div class="note" id="meterNote">メーター最大値 = 1600 mg</div>
+
+        <div class="eval" id="evalBox" style="display:none;">
+          <div>あなたの基準（推奨量）: <strong id="needMg">—</strong> mg <span class="note" id="ulNote"></span></div>
+          <div>判定: <span class="status" id="statusText">—</span></div>
+        </div>
+
         <div class="advice" id="advice" style="display:none;"></div>
       </div>
       <div class="modal-f">
@@ -182,10 +235,11 @@
   </div>
 
 <script>
-  // ===== 設定 =====
-  const METER_MAX = 1600; // メーター100%基準
-  const LOW_THRESHOLD = 600; // 注意喚起の閾値
+  // ===== メーター設定 =====
+  const METER_MAX = 1600;            // メーター100%基準（UI用）
+  const LOW_THRESHOLD_GENERIC = 600; // 「少なめ」汎用コメントの目安（UI用）
 
+  // ===== 設問（元ロジック踏襲） =====
   const QUESTIONS = [
     { id:'q1', label:'1) 牛乳（どのくらい飲みますか？）', options:[
       {t:'選択してください', mg:''}, {t:'ほとんど飲まない', mg:0}, {t:'月1−2回', mg:20},
@@ -213,7 +267,7 @@
     ]},
     { id:'q7', label:'7) 海藻類（わかめ・あおさ・のり等）', options:[
       {t:'選択してください', mg:''}, {t:'ほとんど食べない', mg:0}, {t:'週1−2回', mg:20},
-      {t:'週3−4回', mg:40}, {t:'ほとんど毎日', mg:80} // 160mg 欄は無しの想定
+      {t:'週3−4回', mg:40}, {t:'ほとんど毎日', mg:80}
     ]},
     { id:'q8', label:'8) 骨ごと食べられる魚（シシャモ・いわし）', options:[
       {t:'選択してください', mg:''}, {t:'ほとんど食べない', mg:0}, {t:'月1−2回', mg:20},
@@ -228,7 +282,7 @@
     ]},
   ];
 
-  // ===== レンダリング =====
+  // ===== 画面描画 =====
   const qgrid = document.getElementById('qgrid');
   QUESTIONS.forEach(q=>{
     const f = document.createElement('div');
@@ -249,7 +303,10 @@
     qgrid.appendChild(f);
   });
 
-  // ===== ロジック =====
+  // ===== 参照要素 =====
+  const sexEl = document.getElementById('sex');
+  const ageEl = document.getElementById('age');
+
   const calcBtn = document.getElementById('calcBtn');
   const resetBtn = document.getElementById('resetBtn');
 
@@ -261,10 +318,57 @@
   const barEl = document.getElementById('bar');
   const noteEl = document.getElementById('meterNote');
   const adviceEl = document.getElementById('advice');
+  const evalBox = document.getElementById('evalBox');
+  const needMgEl = document.getElementById('needMg');
+  const statusTextEl = document.getElementById('statusText');
+  const ulNoteEl = document.getElementById('ulNote');
 
   noteEl.textContent = `メーター最大値 = ${METER_MAX} mg`;
 
+  // ===== 推奨量テーブル（日本人の食事摂取基準 2025準拠） =====
+  // 参考: 男性 表1-1、女性 表1-2（18歳以上のUL=2500mg）
+  // 未就学～高校生も対応（本UIの想定から外れるが数値は用意）
+  const RDA = {
+    male: [
+      {min:1, max:2, val:450},
+      {min:3, max:5, val:600},
+      {min:6, max:7, val:600},
+      {min:8, max:9, val:650},
+      {min:10, max:11, val:700},
+      {min:12, max:14, val:1000},
+      {min:15, max:17, val:800},
+      {min:18, max:29, val:800},
+      {min:30, max:64, val:750},
+      {min:65, max:74, val:750},
+      {min:75, max:120, val:750},
+    ],
+    female: [
+      {min:1, max:2, val:400},
+      {min:3, max:5, val:550},
+      {min:6, max:7, val:550},
+      {min:8, max:9, val:750},
+      {min:10, max:11, val:750},
+      {min:12, max:14, val:800},
+      {min:15, max:17, val:650},
+      {min:18, max:74, val:650},
+      {min:75, max:120, val:600},
+    ]
+  };
+  const UL_ADULT = 2500; // 18歳以上の耐容上限量（mg/日）
+
+  function getRecommended(sex, age){
+    const t = RDA[sex];
+    if(!t) return {rda:null, ul:null};
+    const hit = t.find(r=> age>=r.min && age<=r.max);
+    const rda = hit ? hit.val : null;
+    const ul = age>=18 ? UL_ADULT : null;
+    return {rda, ul};
+  }
+
+  // ===== 入力・計算ユーティリティ =====
   function allAnswered(){
+    if(!(sexEl.value && ageEl.value)) return false;
+    if(Number(ageEl.value) < 1) return false;
     return QUESTIONS.every(q=>{
       const v = document.getElementById(q.id).value;
       return v !== '';
@@ -277,35 +381,63 @@
     });
     return sum;
   }
-  function openModal(){
-    backdrop.style.display = 'flex';
-  }
-  function closeModal(){
-    backdrop.style.display = 'none';
-  }
+  function openModal(){ backdrop.style.display = 'flex'; }
+  function closeModal(){ backdrop.style.display = 'none'; }
   function resetAll(){
+    sexEl.selectedIndex = 0;
+    ageEl.value = '';
     QUESTIONS.forEach(q=>{
       const sel = document.getElementById(q.id);
       sel.selectedIndex = 0; // placeholder
     });
   }
+
+  function statusByNeed(total, need, ul){
+    if(need==null) return {cls:'warn', text:'年齢・性別の情報が不十分です'};
+    if(ul && total >= ul) return {cls:'bad', text:'過剰の可能性（耐容上限量以上）'};
+    if(total >= need) return {cls:'ok', text:'推奨量を満たしています'};
+    if(total >= Math.round(0.8*need)) return {cls:'warn', text:'やや不足（推奨量の8割未満に注意）'};
+    return {cls:'warn', text:'不足の可能性'};
+  }
+
   function updateModal(total){
+    const sex = sexEl.value;
+    const age = Number(ageEl.value);
+    const {rda, ul} = getRecommended(sex, age);
+
     totalMgEl.textContent = total;
     const pct = Math.max(0, Math.min(100, Math.round(total / METER_MAX * 100)));
     barEl.style.width = pct + '%';
-    // アドバイス
-    if (total < LOW_THRESHOLD){
-      adviceEl.style.display = 'block';
-      adviceEl.textContent = '合計が基準に満たない可能性があります。乳製品・小魚・青菜などを意識して取り入れると改善が期待できます。';
-    } else {
-      adviceEl.style.display = 'block';
-      adviceEl.textContent = 'この調子を維持しましょう。'; // ← コメント本文
+
+    // 判定
+    evalBox.style.display = 'block';
+    needMgEl.textContent = rda!=null ? rda : '—';
+    if(ul){
+      ulNoteEl.textContent = `（18歳以上の耐容上限量: ${ul} mg/日）`;
+    }else{
+      ulNoteEl.textContent = '';
+    }
+    const st = statusByNeed(total, rda, ul);
+    statusTextEl.className = `status ${st.cls}`;
+    statusTextEl.textContent = st.text;
+
+    // コメント
+    adviceEl.style.display = 'block';
+    if(rda==null){
+      adviceEl.textContent = '年齢・性別の入力を確認してください。';
+    }else if(total < rda){
+      adviceEl.textContent = '推奨量に届いていません。乳製品・小魚・青菜・大豆製品を上手に組み合わせ、日々の食事でカルシウムを意識してみてください。';
+    }else if(ul && total >= ul){
+      adviceEl.textContent = '耐容上限量（18歳以上 2,500 mg/日）を超えています。サプリや強化食品の摂り過ぎに注意してください。';
+    }else{
+      adviceEl.textContent = '良好です。この調子を維持しましょう。';
     }
   }
 
+  // ===== イベント =====
   calcBtn.addEventListener('click', ()=>{
     if(!allAnswered()){
-      alert('すべての設問で選択してください。');
+      alert('年齢・性別を含め、すべての項目で選択・入力してください。');
       return;
     }
     const total = computeTotal();
@@ -313,11 +445,11 @@
     openModal();
   });
   resetBtn.addEventListener('click', resetAll);
-  closeBtn.addEventListener('click', closeModal);
-  backdrop.addEventListener('click', (e)=>{ if(e.target === backdrop) closeModal(); });
-  againBtn.addEventListener('click', ()=>{ resetAll(); closeModal(); });
+  document.getElementById('closeBtn').addEventListener('click', closeModal);
+  document.getElementById('backdrop').addEventListener('click', (e)=>{ if(e.target === backdrop) closeModal(); });
+  document.getElementById('againBtn').addEventListener('click', ()=>{ resetAll(); closeModal(); });
 
-  // キーボード操作（Escで閉じる）
+  // Escで閉じる
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
 </script>
 </body>
